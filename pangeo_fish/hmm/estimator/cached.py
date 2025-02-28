@@ -12,6 +12,12 @@ from pangeo_fish import tracks, utils
 from pangeo_fish.hmm.decode import mean_track, modal_track, viterbi, viterbi2
 from pangeo_fish.hmm.filter import _backward_zarr, _forward_zarr
 
+try:
+    from zarr.storage import StoreLike
+except ImportError:  # pragma: no cover
+    # fallback for zarr-python v2
+    StoreLike = zarr.storage.Store
+
 
 @dataclass
 class CachedEstimator:
@@ -35,7 +41,7 @@ class CachedEstimator:
     predictor_factory: callable
     sigma: float | None = None
 
-    cache: str | os.PathLike | zarr.storage.Store = None
+    cache: str | os.PathLike | StoreLike = None
     progress: bool = False
 
     def to_dict(self):

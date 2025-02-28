@@ -97,3 +97,10 @@ known-third-party = []
 [tool.ruff.lint.flake8-tidy-imports]
 # Disallow all relative imports.
 ban-relative-imports = "all"
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "error:::pangeo_fish.*",
+    "ignore:Missing optional dependencies. To use the trajectory smoother classes please install Stone Soup:UserWarning:movingpandas",
+    "ignore:Specifying VariableLengthTuple:DeprecationWarning:traitlets",
+]
