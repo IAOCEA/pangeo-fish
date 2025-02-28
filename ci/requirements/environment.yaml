@@ -39,4 +39,7 @@ dependencies:
   - pip:
       - cdshealpix
       - healpix-convolution
+      - dask-hpcconfig
+      - xdggs
+      - imageio[ffmpeg]
       - git+https://github.com/iaocea/xarray-healpy.git@0ffca6058f4008f4f22f076e2d60787fcf32ac82

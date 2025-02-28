@@ -23,6 +23,8 @@ dependencies = [
     "xarray-healpy",
     "cf_xarray",
     "healpix-convolution",
+    "xdggs",
+    "imageio[ffmpeg]"
 ]
 dynamic = ["version"]
 
