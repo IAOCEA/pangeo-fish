@@ -1,3 +1,5 @@
+"""Module for managing I/O operations."""
+
 import json
 import warnings
 
@@ -41,12 +43,12 @@ def open_tag(root, name, storage_options=None):
     Parameters
     ----------
     root : str or fsspec.FSMap
-        The tag root. If not a mapper object, ``storage_options`` need
+        The tag root. If not a mapper object, `storage_options` need
         to contain the necessary access options.
     name : str
         The DST name of the tag.
     storage_options : mapping, optional
-        The storage options required to open the mapper. Only used if ``root`` is a url.
+        The storage options required to open the mapper. Only used if `root` is a url.
 
     Returns
     -------
@@ -106,7 +108,7 @@ def open_copernicus_catalog(cat, chunks=None):
         The pre-opened intake catalog
     chunks : mapping, optional
         The initial chunk size. Should be multiples of the on-disk chunk sizes. By
-        default, the chunksizes are ``{"lat": -1, "lon": -1, "depth": 11, "time": 8}``
+        default, the chunksizes are `{"lat": -1, "lon": -1, "depth": 11, "time": 8}`
 
     Returns
     -------
@@ -173,6 +175,7 @@ def prepare_dataset(dataset, chunks=None, bbox=None, names=None):
     names : dict[str, str], optional
         A dictionary that maps the three variables that correspond to the "TEMP", "XE" and "H0" data. By
         default, the names align data from the Copernicus Marine Service with ``{"thetao": "TEMP", "zos": "XE", "deptho": "H0"}``.
+
     Returns
     -------
     ds : xarray.Dataset
@@ -312,21 +315,28 @@ def read_trajectories(names, root, storage_options=None, format="geoparquet"):
 
 
 def save_html_hvplot(plot, filepath, storage_options=None):
+    """save a Holoviews plot to an HTML file either locally or on an S3 bucket.
+
+    Parameters:
+    -----------
+    plot :
+        Holoviews plot object.
+    filepath : str
+        The file path where the plot HTML file will be saved. If the file path starts with 's3://', the plot will be saved to an S3 bucket.
+    storage_options : (dict, optional)
+        Dictionary containing storage options for connecting to the S3 bucket (required if saving to S3).
+
+    Returns:
+    --------
+    success : bool
+        True if the plot was saved successfully, False otherwise.
+    message : str
+        A message describing the outcome of the operation.
+    """
+
     import hvplot
     import hvplot.xarray
 
-    """
-    Save a Holoviews plot to an HTML file either locally or on an S3 bucket.
-
-    Parameters:
-    - plot: Holoviews plot object.
-    - filepath (str): The file path where the plot HTML file will be saved. If the file path starts with 's3://', the plot will be saved to an S3 bucket.
-    - storage_options (dict, optional): Dictionary containing storage options for connecting to the S3 bucket (required if saving to S3).
-
-    Returns:
-    - success (bool): True if the plot was saved successfully, False otherwise.
-    - message (str): A message describing the outcome of the operation.
-    """
     try:
         if filepath.startswith("s3://"):
             import s3fs
@@ -363,33 +373,30 @@ def open_copernicus_zarr(
     -----------
     name : str
         Name of the dataset to retrieve. Supported models and corresponding frequencies are:
+            - "GLOBAL_ANALYSISFORECAST_PHY_001_024" with freq = "D" (daily)
+                working.
+            - "NWSHELF_ANALYSISFORECAST_PHY_004_013" with freq = "D" (daily)
+                working.
 
-        - "GLOBAL_ANALYSISFORECAST_PHY_001_024" with freq = "D" (daily)
-            working.
-        - "NWSHELF_ANALYSISFORECAST_PHY_004_013" with freq = "D" (daily)
-            working.
-        Future supported models and corresponding frequencies are:
-        - "GLOBAL_ANALYSISFORECAST_PHY_001_024" with freq =  "H" (hourly)
-            not working. (ValueError: conflicting sizes for dimension 'time': length 20184 on 'XE' and length 3365 on {'elevation': 'elevation', 'latitude': 'latitude', 'longitude': 'longitude', 'time': 'time'})
-        - "GLOBAL_MULTIYEAR_PHY_001_030" with freq = "NEW" or "OLD",
-            not working. (KeyError: 'cmems_mod_glo_phy_anfc_0.083deg_static_202211--ext--bathy')
-        - "IBI_MULTIYEAR_PHY_005_002" with freq = "D" (daily),
-            not working(KeyError: 'cmems_mod_ibi_phy_anfc_0.027deg-3D_P1D-m_202211')
-        - "IBI_MULTIYEAR_PHY_005_002" with freq =  "H" (hourly),
-            not working (KeyError: 'cmems_mod_ibi_phy_anfc_0.027deg-3D_PT1H-m_202211')
-
-        - "IBI_ANALYSISFORECAST_PHY_005_001" with freq = "D" (daily)
-            (KeyError: 'cmems_mod_ibi_phy_my_0.083deg-3D_P1D-m_202012')
-        - "IBI_ANALYSISFORECAST_PHY_005_001" with freq = "H" (hourly),
-            (KeyError: '')
-
-        - "NWSHELF_ANALYSISFORECAST_PHY_004_013" with freq = "H" (hourly),
-             (ValueError: conflicting sizes for dimension 'time': length 26616 on 'XE' and length 10560 on {'elevation': 'elevation', 'latitude': 'latitude', 'longitude': 'longitude', 'time': 'time'})
-        - "NWSHELF_MULTIYEAR_PHY_004_009" with freq = "H" (hourly) .
-            (KeyError: '')
-        - "NWSHELF_MULTIYEAR_PHY_004_009" with freq = "D" (daily).
-            (KeyError: 'static')
-
+            Future supported models and corresponding frequencies are:
+                - "GLOBAL_ANALYSISFORECAST_PHY_001_024" with freq =  "H" (hourly)
+                    not working. (ValueError: conflicting sizes for dimension 'time': length 20184 on 'XE' and length 3365 on {'elevation': 'elevation', 'latitude': 'latitude', 'longitude': 'longitude', 'time': 'time'})
+                - "GLOBAL_MULTIYEAR_PHY_001_030" with freq = "NEW" or "OLD",
+                    not working. (KeyError: 'cmems_mod_glo_phy_anfc_0.083deg_static_202211--ext--bathy')
+                - "IBI_MULTIYEAR_PHY_005_002" with freq = "D" (daily),
+                    not working(KeyError: 'cmems_mod_ibi_phy_anfc_0.027deg-3D_P1D-m_202211')
+                - "IBI_MULTIYEAR_PHY_005_002" with freq =  "H" (hourly),
+                    not working (KeyError: 'cmems_mod_ibi_phy_anfc_0.027deg-3D_PT1H-m_202211')
+                - "IBI_ANALYSISFORECAST_PHY_005_001" with freq = "D" (daily)
+                    (KeyError: 'cmems_mod_ibi_phy_my_0.083deg-3D_P1D-m_202012')
+                - "IBI_ANALYSISFORECAST_PHY_005_001" with freq = "H" (hourly),
+                    (KeyError: '')
+                - "NWSHELF_ANALYSISFORECAST_PHY_004_013" with freq = "H" (hourly),
+                    (ValueError: conflicting sizes for dimension 'time': length 26616 on 'XE' and length 10560 on {'elevation': 'elevation', 'latitude': 'latitude', 'longitude': 'longitude', 'time': 'time'})
+                - "NWSHELF_MULTIYEAR_PHY_004_009" with freq = "H" (hourly) .
+                    (KeyError: '')
+                - "NWSHELF_MULTIYEAR_PHY_004_009" with freq = "D" (daily).
+                    (KeyError: 'static')
 
     format : {"arco-geo-series", "arco-time-series"}, default: "arco-geo-series"
         Format of the dataset.

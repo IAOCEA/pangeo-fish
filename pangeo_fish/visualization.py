@@ -1,3 +1,5 @@
+"""Rendering functions."""
+
 import warnings
 
 import cartopy.crs as ccrs
@@ -146,11 +148,12 @@ def create_single_frame(ds: xr.Dataset, figure, **kwargs):
 
 def render_frame(ds: xr.Dataset, *args, figsize=(14, 8), frames_dir=".", **kwargs):
     """
-    .. Warning::
+    .. warning::
         Designed to be used with `dask.map_blocks()`.
         As such, `ds` must have the following variables:
-            - `time_index`, representing the time index. It is used for naming the image (`.png`)
-            - `emission` and `states`, the data to plot
+        - `time_index`, representing the time index. It is used for naming the image (`.png`)
+        - `emission` and `states`, the data to plot
+
 
     Used along with `dask.map_blocks()`, it will call create_single_frame() for each timestep,\
     and save the consequent images under `{frames_dir}/frame_XXXXX.png`.

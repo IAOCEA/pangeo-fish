@@ -1,3 +1,5 @@
+"""Implements diff operations between tags and reference data."""
+
 import numba
 import numpy as np
 import xarray as xr

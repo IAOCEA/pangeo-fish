@@ -125,9 +125,10 @@ class EagerEstimator:
         ----------
         X : Dataset
             The emission probability maps. The dataset should contain these variables:
-            - `initial`, the initial probability map
-            - `pdf`, the emission probabilities
-            - `mask`, a mask to select ocean pixels
+                - `initial`, the initial probability map
+                - `pdf`, the emission probabilities
+                - `mask`, a mask to select ocean pixels
+
             Due to the convolution method we use today, we can't pass np.nan, thus we send x.fillna(0), but drop the values whihch are less than 0 and put them back to np.nan when we return the value.
         spatial_dims : list of hashable, optional
             The spatial dimensions of the dataset.
@@ -157,9 +158,10 @@ class EagerEstimator:
         ----------
         X : Dataset
             The emission probability maps. The dataset should contain these variables:
-            - `pdf`, the emission probabilities
-            - `mask`, a mask to select ocean pixels
-            - `initial`, the initial probability map
+                - `pdf`, the emission probabilities
+                - `mask`, a mask to select ocean pixels
+                - `initial`, the initial probability map
+
         spatial_dims : list of hashable, optional
             The spatial dimensions of the dataset.
         temporal_dims : list of hashable, optional
@@ -191,18 +193,19 @@ class EagerEstimator:
         ----------
         X : Dataset
             The emission probability maps. The dataset should contain these variables:
-            - `pdf`, the emission probabilities
-            - `mask`, a mask to select ocean pixels
-            - `initial`, the initial probability map
-            - `final`, the final probability map (optional)
+                - `pdf`, the emission probabilities
+                - `mask`, a mask to select ocean pixels
+                - `initial`, the initial probability map
+                - `final`, the final probability map (optional)
+
         states : Dataset, optional
             The precomputed state probability maps. The dataset should contain these variables:
-            - `states`, the state probabilities
+                - `states`, the state probabilities
         mode : str or list of str, default: "viterbi"
             The decoding method. Can be one of
-            - ``"mean"``: use the centroid of the state probabilities as decoded state
-            - ``"mode"``: use the maximum of the state probabilities as decoded state
-            - ``"viterbi"``: use the viterbi algorithm to determine the most probable states
+                - `"mean"`: use the centroid of the state probabilities as decoded state
+                - `"mode"`: use the maximum of the state probabilities as decoded state
+                - `"viterbi"`: use the viterbi algorithm to determine the most probable states
 
             If a list of methods is given, decode using all methods in sequence.
         additional_quantities : None or list of str, default: ["distance", "speed"]
@@ -210,9 +213,10 @@ class EagerEstimator:
             empty list to not compute anything.
 
             Possible values are:
-            - "distance": distance to the previous track point in ``[km]``
-            - "speed": average speed for the movement from the previous to the current
-              track point, in ``[km/h]``
+                - "distance": distance to the previous track point in `[km]`
+                - "speed": average speed for the movement from the previous to the current
+                    track point, in `[km/h]`
+
         spatial_dims : list of hashable, optional
             The spatial dimensions of the dataset.
         temporal_dims : list of hashable, optional

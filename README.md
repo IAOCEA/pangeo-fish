@@ -1,8 +1,8 @@
 # pangeo-fish
 
-## installing
+## Installation
 
-The library itself has not been published anywhere, so for now it has to be installed from source:
+Since the package has not been released yet, it has to be installed from source:
 
 ```sh
 git clone https://github.com/iaocea/pangeo-fish.git
@@ -20,8 +20,12 @@ The main dependencies are:
 - opt_einsum
 - sparse
 - healpy
+- dask
+- xdggs
+- healpix-convolution
 
-Install them by creating a new `conda` environment:
+To avoid unexpected issues, we provide a file that specifies the different requirements for having `pangeo-fish` up and running.
+Install the aforementioned `conda` environment with the following:
 
 ```sh
 mamba env create -n pangeo-fish -f ci/requirements/environment.yaml
@@ -30,9 +34,8 @@ conda activate pangeo-fish
 
 (use the drop-in replacement `mamba` or `micromamba` for faster results)
 
-Install the pangeo-fish downloaded above using pip by following command.
+Finally, install the package itself with `pip`:
 
 ```sh
-
 pip install -e .
 ```

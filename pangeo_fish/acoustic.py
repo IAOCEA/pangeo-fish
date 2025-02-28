@@ -1,3 +1,7 @@
+"""
+Module for computing probability distributions from acoustic detections.
+"""
+
 import flox.xarray
 import healpy as hp
 import numpy as np
@@ -231,16 +235,16 @@ def emission_probability(
         a length unit.
     nondetections : {"mask", "ignore"}, default: "mask"
         How to deal with non-detections in time slices without detections:
-
         - "mask": set the buffer around stations without detections to `0`.
         - "ignore": all valid pixels are equally probable.
+
     cell_ids : {"recompute", "keep"}, default: "recompute"
         How to deal with model cell ids for the computation of reception masks.
-
         - "keep": use the cell ids given by the model. This is the more correct method.
         - "recompute": recompute the cell ids based on the rotated lat / lon coords.
-    dims : list of str, default: ["x", "y"]
-        The spatial dimensions.
+
+    dims : list[str], default: None
+        Dimensions to use: either ["x", "y"] or ["cells"]
 
     Returns
     -------

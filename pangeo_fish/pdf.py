@@ -1,3 +1,5 @@
+"""Implements operations for merging probability distributions."""
+
 import cf_xarray  # noqa: F401
 import more_itertools
 import scipy.stats
