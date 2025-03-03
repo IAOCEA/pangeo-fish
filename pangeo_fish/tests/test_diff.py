@@ -37,14 +37,14 @@ def test_diff_z():
     """
     Test diff_z via xr.apply_ufunc.
 
-    Model Dataset:
+    Model xarray.Dataset:
       - depth: [0.5, 1.0, 1.5, 2.0, 2.5]
       - TEMP: [10, 15, 20, 25, 30]
       - dynamic_depth: same as depth
       - dynamic_bathymetry: 2.5 (>= np.max(pressure)*0.8)
       - TEMP has units "degC"
 
-    Tag Dataset:
+    Tag xarray.Dataset:
       - temperature: [14, 19, 24]
       - pressure: [1.0, 1.5, 2.0]
 

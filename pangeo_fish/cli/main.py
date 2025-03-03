@@ -55,7 +55,7 @@ def main():
 @click.argument("parameters", type=click.File(mode="r"))
 @click.argument("runtime_config", type=click.File(mode="r"))
 def prepare(parameters, runtime_config, cluster_definition):
-    """transform the input data into a set of emission parameters"""
+    """Transform the input data into a set of emission parameters"""
     import intake
 
     from pangeo_fish import acoustic

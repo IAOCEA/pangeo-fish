@@ -36,7 +36,7 @@ class GridSearch:
 
         Parameters
         ----------
-        X : Dataset
+        X : xarray.Dataset
             The input data.
 
         Returns
@@ -91,11 +91,11 @@ class EagerBoundsSearch:
         self.optimizer_kwargs = optimizer_kwargs
 
     def fit(self, X):
-        """optimize the score of the estimator
+        """Optimize the score of the estimator
 
         Parameters
         ----------
-        X : Dataset
+        X : xarray.Dataset
             The input data.
 
         Returns
@@ -143,11 +143,11 @@ class TargetBoundsSearch:
         self.x0 = x0
 
     def fit(self, X):
-        """optimize the score of the estimator
+        """Optimize the score of the estimator
 
         Parameters
         ----------
-        X : Dataset
+        X : xarray.Dataset
             The input data.
 
         Returns

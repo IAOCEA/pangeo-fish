@@ -5,7 +5,7 @@ scheme_re = re.compile(r"(?P<type>[^:]+):(?P<data>.+)")
 
 
 def create_cluster(spec, *, scale=None, additional_kwargs=None):
-    """create a cluster from a spec and return a client
+    """Create a cluster from a spec and return a client
 
     Parameters
     ----------
@@ -13,9 +13,10 @@ def create_cluster(spec, *, scale=None, additional_kwargs=None):
         The method of creating a cluster:
 
         - "local": local cluster
-        - the scheduler address of a running cluster: `tcp://<ip>:<port>`
-        - `dask-jobqueue:<path-to-spec-file>`
-        - `dask-hpcconfig:<name>`
+        - the scheduler address of a running cluster: ``tcp://<ip>:<port>``
+        - ``dask-jobqueue:<path-to-spec-file>``
+        - ``dask-hpcconfig:<name>``
+
     scale : int or mapping, optional
         Scale the cluster after creation. Not allowed with scheduler addresses.
     additional_kwargs : mapping, optional

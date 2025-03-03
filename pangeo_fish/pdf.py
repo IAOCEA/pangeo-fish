@@ -1,3 +1,5 @@
+"""Implements operations for merging probability distributions."""
+
 import cf_xarray  # noqa: F401
 import more_itertools
 import scipy.stats
@@ -10,11 +12,11 @@ from pangeo_fish.utils import _detect_spatial_dims, normalize
 # also try: multivariate_normal, gaussian_kde
 # TODO: use numba to vectorize (using `guvectorize`?)
 def normal(samples, mean, std, *, dims):
-    """compute the combined pdf of independent layers
+    """Compute the combined pdf of independent layers
 
     Parameters
     ----------
-    samples : DataArray, Variable, or array-like
+    samples : xarray.DataArray, Variable, or array-like
         The samples to compute the pdf from
     mean : float
         The mean of the distribution
@@ -25,7 +27,7 @@ def normal(samples, mean, std, *, dims):
 
     Returns
     -------
-    pdf : DataArray
+    pdf : xarray.DataArray
         The computed pdf
     """
 

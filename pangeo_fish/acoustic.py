@@ -1,3 +1,7 @@
+"""
+Module for computing probability distributions from acoustic detections.
+"""
+
 import flox.xarray
 import healpy as hp
 import numpy as np
@@ -17,14 +21,14 @@ from pangeo_fish.healpy import (
 
 
 def count_detections(detections, by):
-    """count the amount of detections by interval
+    """Count the amount of detections by interval
 
     Parameters
     ----------
     detections : xarray.Dataset
         The detections for a specific tag
     by
-        The values to group by. Can be anything that `flox` accepts.
+        The values to group by. Can be anything that ``flox`` accepts.
 
     Returns
     -------
@@ -156,21 +160,26 @@ def buffer_points_cells(
 
 
 def create_masked_fill_map(tag, grid, maps, chunk_time=24, dims=["x", "y"]):
-    """
-    Create a masked fill map indicating the detection zones.
-
-    Parameters:
-    - tag (xarray.Dataset): A dataset containing station information, with variables 'recover_time' and 'deploy_time'.
-    - grid (xarray.Dataset): A dataset containing grid information, with a variable 'time'.
-    - maps (xarray.Dataset): A dataset containing map information, containing locations of acoustic stations.
-
-    Returns:
-    - fill_map (xarray.DataArray): A masked fill map indicating the detection zones.
+    """Create a masked fill map indicating the detection zones.
 
     The function creates a masked fill map based on the station and grid information provided. It calculates
-    the detection zones based on the time intervals specified in the 'recover_time' and 'deploy_time' variables
-    in the tag station dataset. It then masks the fill map based on the grid's mask and returns the
+    the detection zones based on the time intervals specified in the ``recover_time`` and ``deploy_time`` variables
+    in the tag station dataset. It then masks the fill map based on the grid``s mask and returns the
     resulting fill map.
+
+    Parameters
+    ----------
+    tag : xarray.Dataset
+        A dataset containing station information, with variables ``recover_time`` and ``deploy_time``.
+    grid : xarray.Dataset
+        A dataset containing grid information, with a variable ``time``.
+    maps : xarray.Dataset
+        A dataset containing map information, containing locations of acoustic stations.
+
+    Returns
+    -------
+    fill_map : xarray.DataArray
+        A masked fill map indicating the detection zones.
     """
     # load stations informations
     ds = tag["stations"].to_dataset()[["recover_time", "deploy_time"]]
@@ -217,7 +226,7 @@ def emission_probability(
     chunk_time=24,
     dims=None,
 ):
-    """construct emission probability maps from acoustic detections
+    """Construct emission probability maps from acoustic detections
 
     Parameters
     ----------
@@ -232,15 +241,17 @@ def emission_probability(
     nondetections : {"mask", "ignore"}, default: "mask"
         How to deal with non-detections in time slices without detections:
 
-        - "mask": set the buffer around stations without detections to `0`.
+        - "mask": set the buffer around stations without detections to ``0``.
         - "ignore": all valid pixels are equally probable.
+
     cell_ids : {"recompute", "keep"}, default: "recompute"
-        How to deal with model cell ids for the computation of reception masks.
+        How to deal with model cell ids for the computation of reception masks:
 
         - "keep": use the cell ids given by the model. This is the more correct method.
         - "recompute": recompute the cell ids based on the rotated lat / lon coords.
-    dims : list of str, default: ["x", "y"]
-        The spatial dimensions.
+
+    dims : list of str, default: None
+        Dimensions to use: either ["x", "y"] or ["cells"]
 
     Returns
     -------
@@ -275,7 +286,7 @@ def emission_probability(
     weights_index = weights.indexes["deployment_id"]
     if weights_index.difference(maps_index, sort=False).size > 0:
         raise ValueError(
-            "Some receiver ids in `tag.acoustic` are not included in `tag.stations`."
+            "Some receiver ids in ``tag.acoustic`` are not included in ``tag.stations``."
         )
 
     if nondetections == "ignore":

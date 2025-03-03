@@ -13,7 +13,7 @@ import xarray as xr
 
 
 def geographic_to_astronomic(lat, lon, rot):
-    """transform geographic coordinates to astronomic coordinates
+    """Transform geographic coordinates to astronomic coordinates
 
     Parameters
     ----------
@@ -21,7 +21,7 @@ def geographic_to_astronomic(lat, lon, rot):
         geographic latitude, in degrees
     lon : array-like
         geographic longitude, in degrees
-    rot : list-like
+    rot : array-like
         Two element list with the rotation transformation (shift?) used by the grid, in
         degrees
 
@@ -39,20 +39,20 @@ def geographic_to_astronomic(lat, lon, rot):
 
 
 def astronomic_to_cartesian(theta, phi, dim="receiver_id"):
-    """transform astronomic coordinates to cartesian coordinates
+    """Transform astronomic coordinates to cartesian coordinates
 
     Parameters
     ----------
-    theta : DataArray
+    theta : array-like
         astronomic colatitude, in degrees
-    phi : DataArray
+    phi : array-like
         astronomic longitude, in degrees
     dim : hashable
         Name of the dimension
 
     Returns
     -------
-    cartesian : Dataset
+    cartesian : xarray.Dataset
         Cartesian coordinates
 
     See Also
@@ -78,12 +78,12 @@ def astronomic_to_cell_ids(nside, phi, theta):
     ----------
     nside : int
         Healpix resolution level
-    phi, theta : xr.DataArray
+    phi, theta : array-like
         astronomic longitude and colatitude, in degrees
 
     Returns
     -------
-    cell_ids : xr.DataArray
+    cell_ids : xarray.DataArray
         The computed cell ids
     """
     phi_, theta_ = dask.compute(phi, theta)
@@ -131,7 +131,7 @@ def _compute_coords(nside):
 
 @dataclass
 class HealpyGridInfo:
-    """class representing a HealPix grid
+    """Class representing a HealPix grid
 
     Attributes
     ----------
@@ -139,9 +139,9 @@ class HealpyGridInfo:
         HealPix grid resolution
     rot : dict of str to float
         Rotation of the healpix sphere.
-    coords : xr.Dataset
+    coords : xarray.Dataset
         Unstructured grid coordinates: latitude, longitude, cell ids.
-    indices : xr.DataArray
+    indices ; xarray.DataArray
         Indices that can be used to reorder to a flattened 2D healpy grid
     """
 
@@ -263,14 +263,14 @@ def _weights_to_sparse(weights):
 
 @dataclass(repr=False)
 class HealpyRegridder:
-    """regrid a dataset to healpy face 0
+    """Regrid a dataset to healpy face 0
 
     Parameters
     ----------
-    input_grid : xr.Dataset
-        The input dataset. For now, it has to have the `"latitude"` and `"longitude"` coordinates.
+    input_grid : xarray.Dataset
+        The input dataset. For now, it has to have the ``"latitude"`` and ``"longitude"`` coordinates.
     output_grid : HealpyGridInfo
-        The target grid, containing healpix parameters like `nside` and `rot`.
+        The target grid, containing healpix parameters like ``nside`` and ``rot``.
     """
 
     input_grid: xr.Dataset
@@ -331,18 +331,18 @@ class HealpyRegridder:
         )
 
     def regrid_ds(self, ds):
-        """regrid a dataset on the same grid as the input grid
+        """Regrid a dataset on the same grid as the input grid
 
         The regridding method is restricted to linear interpolation so far.
 
         Parameters
         ----------
-        ds : xr.Dataset
+        ds : xarray.Dataset
             The input dataset.
 
         Returns
         -------
-        regridded : xr.Dataset
+        regridded : xarray.Dataset
             The regridded dataset
         """
         # based on https://github.com/pangeo-data/xESMF/issues/222#issuecomment-1524041837
@@ -422,7 +422,7 @@ def buffer_points(
     factor=4,
     intersect=False,
 ):
-    """select the cells within a circular buffer around the given positions
+    """Select the cells within a circular buffer around the given positions
 
     Parameters
     ----------
@@ -435,19 +435,19 @@ def buffer_points(
     nside : int
         The resolution of the healpix grid.
     sphere_radius : float, default: 6371000
-        The radius of the underlying sphere, used to convert `radius` to radians. By
+        The radius of the underlying sphere, used to convert ``radius`` to radians. By
         default, this is the standard earth's radius in meters.
     factor : int, default: 4
         The increased resolution for the buffer search.
     intersect : bool, default: False
-        If `False`, select all cells where the center is within the buffer. If `True`,
+        If ``False``, select all cells where the center is within the buffer. If ``True``,
         select cells which intersect the buffer.
 
     Returns
     -------
     masks : xarray.DataArray
-        The masks for each position. The cells within the buffer are `True`, every other
-        cell is set to `False`.
+        The masks for each position. The cells within the buffer are ``True``, every other
+        cell is set to ``False``.
 
     See Also
     --------

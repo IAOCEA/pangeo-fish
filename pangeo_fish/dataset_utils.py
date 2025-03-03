@@ -2,7 +2,7 @@ import xarray as xr
 
 
 def broadcast_variables(ds, variable_names):
-    """broadcast variables against each other
+    """Broadcast variables against each other
 
     Parameters
     ----------

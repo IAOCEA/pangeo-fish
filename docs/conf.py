@@ -1,45 +1,73 @@
-# Configuration file for the Sphinx documentation builder.
-#
-# For the full list of built-in configuration values, see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
+import datetime
+import sys
+from pathlib import Path
 
-# -- Project information -----------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
-import sphinx_rtd_theme
+sys.path.insert(0, str(Path("..").resolve()))
 
 project = "pangeo-fish"
 author = "pangeo-fish developers"
-copyright = f"2023, {author}"
-
-# -- General configuration ---------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
+copyright = f"2023-{datetime.datetime.now().year}, {author}"
 
 extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.autodoc",
-    "sphinx.ext.doctest",
-    "autoapi.extension",
+    "sphinx.ext.napoleon",
+    # "sphinx.ext.doctest",
+    # "autoapi.extension",
     "sphinx_copybutton",
     "myst_parser",
+    "nbsphinx",
+    "sphinx.ext.intersphinx",
+    "nbsphinx_link",
+    "sphinx_remove_toctrees",
 ]
 
-# # Document Python Code
-autoapi_type = "python"
-autoapi_dirs = ["../pangeo_fish"]
-autoapi_ignore = ["*ipynb*"]
+napoleon_google_docstring = False
+napoleon_numpy_docstring = True
+napoleon_use_param = False
+napoleon_use_rtype = False
+napoleon_preprocess_types = True
+napoleon_type_aliases = {
+    # general terms
+    "sequence": ":term:`sequence`",
+    "iterable": ":term:`iterable`",
+    "callable": ":term:`callable`",
+    "dict_like": ":term:`dict-like <mapping>`",
+    "dict-like": ":term:`dict-like <mapping>`",
+    "path-like": ":term:`path-like <path-like object>`",
+    "mapping": ":term:`mapping`",
+    "file-like": ":term:`file-like <file-like object>`",
+    "any": ":py:class:`any <object>`",
+    # numpy terms
+    "array_like": ":term:`array_like`",
+    "array-like": ":term:`array-like <array_like>`",
+    "scalar": ":term:`scalar`",
+    "array": ":term:`array`",
+    "hashable": ":term:`hashable <name>`",
+}
 
+autosummary_generate = True
+autosummary_imported_members = False
+nbsphinx_execute = "never"
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", ".ipynb_checkpoints"]
+remove_from_toctrees = ["generated/*"]
+suppress_warnings = ["config.cache"]
 
-
-# -- Options for HTML output -------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
-
-
-html_theme = "sphinx_rtd_theme"
+html_theme = "sphinx_book_theme"
 pygments_style = "sphinx"
 
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+html_static_path = []
 
-html_static_path = ["_static"]
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3/", None),
+    "sphinx": ("https://www.sphinx-doc.org/en/master/", None),
+    "numpy": ("https://numpy.org/doc/stable", None),
+    "xarray": ("https://docs.xarray.dev/en/latest", None),
+    "xdggs": ("https://xdggs.readthedocs.io/en/latest", None),
+    "pandas": ("https://pandas.pydata.org/docs/", None),
+    "zarr": ("https://zarr.readthedocs.io/en/stable/", None),
+    "holoviews": ("https://holoviews.org/", None),
+    "movingpandas": ("https://movingpandas.readthedocs.io/en/main/", None),
+}

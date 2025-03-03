@@ -134,7 +134,7 @@ def dummy_tag():
 @pytest.mark.parametrize("detections", [False, True])
 def test_emission_probability(detections, dummy_tag, dummy_grid):
     """
-    Test of the `emission_probability` function using small datasets (10 time steps).
+    Test of the ``emission_probability`` function using small datasets (10 time steps).
     """
     # Set receiver buffer size to 1000 m
     receiver_buffer = ureg.Quantity(1000, "m")

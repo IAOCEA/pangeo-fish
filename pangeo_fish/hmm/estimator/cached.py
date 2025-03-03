@@ -44,12 +44,13 @@ class CachedEstimator:
         return {k: v for k, v in asdict(self).items() if k not in exclude}
 
     def set_params(self, **params):
-        """set the parameters on a new instance
+        """Set the parameters on a new instance
 
         Parameters
         ----------
-        **params
+        params : dict
             Mapping of parameter name to new value.
+
         """
         return replace(self, **params)
 
@@ -142,17 +143,19 @@ class CachedEstimator:
     def predict_proba(
         self, X, *, cache=None, spatial_dims=None, temporal_dims=None, progress=None
     ):
-        """predict the state probabilities
+        """Predict the state probabilities
 
         This is done by applying the forward-backward algorithm to the data.
 
         Parameters
         ----------
-        X : Dataset
+        X : xarray.Dataset
             The emission probability maps. The dataset should contain these variables:
-            - `initial`, the initial probability map
-            - `pdf`, the emission probabilities
-            - `mask`, a mask to select ocean pixels
+
+            - ``initial``, the initial probability map
+            - ``pdf``, the emission probabilities
+            - ``mask``, a mask to select ocean pixels
+
         cache : str, pathlib.Path or zarr.Store
             Path to the cache store. Used to compute the state probabilities with nearly
             constant memory usage.
@@ -163,7 +166,7 @@ class CachedEstimator:
 
         Returns
         -------
-        state_probabilities : DataArray
+        state_probabilities : xarray.DataArray
             The computed state probabilities
 
         Notes
@@ -188,25 +191,27 @@ class CachedEstimator:
     def score(
         self, X, *, cache=None, spatial_dims=None, temporal_dims=None, progress=None
     ):
-        """score the fit of the selected model to the data
+        """Score the fit of the selected model to the data
 
         Apply the forward-backward algorithm to the given data, then return the
         negative logarithm of the normalization factors.
 
         Parameters
         ----------
-        X : Dataset
+        X : xarray.Dataset
             The emission probability maps. The dataset should contain these variables:
-            - `pdf`, the emission probabilities
-            - `mask`, a mask to select ocean pixels
-            - `initial`, the initial probability map
+
+            - ``pdf``, the emission probabilities
+            - ``mask``, a mask to select ocean pixels
+            - ``initial``, the initial probability map
+
         spatial_dims : list of hashable, optional
             The spatial dimensions of the dataset.
         temporal_dims : list of hashable, optional
             The temporal dimensions of the dataset.
 
-        Return
-        ------
+        Returns
+        -------
         score : float
             The score for the fit with the current parameters.
         """
@@ -234,21 +239,26 @@ class CachedEstimator:
         progress=False,
         additional_quantities=["distance", "speed"],
     ):
-        """decode the state sequence from the selected model and the data
+        """Decode the state sequence from the selected model and the data
 
         Parameters
         ----------
-        X : Dataset
+        X : xarray.Dataset
             The emission probability maps. The dataset should contain these variables:
-            - `pdf`, the emission probabilities
-            - `mask`, a mask to select ocean pixels
-            - `initial`, the initial probability map
-            - `final`, the final probability map (optional)
-        states : Dataset, optional
+
+            - ``pdf``, the emission probabilities
+            - ``mask``, a mask to select ocean pixels
+            - ``initial``, the initial probability map
+            - ``final``, the final probability map (optional)
+
+        states : xarray.Dataset, optional
             The precomputed state probability maps. The dataset should contain these variables:
-            - `states`, the state probabilities
+
+            - ``states``, the state probabilities
+
         mode : str or list of str, default: "viterbi"
-            The decoding method. Can be one of
+            The decoding method. Can be one of:
+
             - ``"mean"``: use the centroid of the state probabilities as decoded state
             - ``"mode"``: use the maximum of the state probabilities as decoded state
             - ``"viterbi"``: use the viterbi algorithm to determine the most probable states
@@ -259,9 +269,11 @@ class CachedEstimator:
             empty list to not compute anything.
 
             Possible values are:
-            - "distance": distance to the previous track point in ``[km]``
-            - "speed": average speed for the movement from the previous to the current
-              track point, in ``[km/h]``
+
+            - ``"distance"``: distance to the previous track point in ``[km]``
+            - ``"speed"``: average speed for the movement from the previous to the current
+                track point, in ``[km/h]``
+
         spatial_dims : list of hashable, optional
             The spatial dimensions of the dataset.
         temporal_dims : list of hashable, optional

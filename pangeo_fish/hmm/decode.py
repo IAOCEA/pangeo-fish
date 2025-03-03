@@ -95,7 +95,7 @@ def viterbi(emission, sigma):
     """
     Parameters
     ----------
-    emission : Dataset
+    emission : xarray.Dataset
         The emission probability dataset containing land mask and initial
         probabilities and the pdf.
     sigma : float
@@ -103,9 +103,9 @@ def viterbi(emission, sigma):
 
     Returns
     -------
-    state_metrics : DataArray
+    state_metrics : xarray.DataArray
         The evolution of state metrics over time
-    positions : DataArray
+    positions : xarray.DataArray
         The integer positions of the tracks
         TODO: translate this to label space without computing
     """
