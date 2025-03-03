@@ -234,7 +234,7 @@ def emission_probability(
 
         - "mask": set the buffer around stations without detections to `0`.
         - "ignore": all valid pixels are equally probable.
-    cell_ids : {"recompute", "keep"}, default: "recompute"
+    cell_ids : {"recompute", "keep"}, default: "keep"
         How to deal with model cell ids for the computation of reception masks.
 
         - "keep": use the cell ids given by the model. This is the more correct method.
@@ -280,7 +280,7 @@ def emission_probability(
 
     if nondetections == "ignore":
         fill_map = xr.ones_like(grid["cell_ids"], dtype=float).pipe(
-            utils.normalize, dim=["x", "y"]
+            utils.normalize, dim=dims
         )
     elif nondetections == "mask":
         # fill_map = maps.any(dim="deployment_id").pipe(np.logical_not).astype(float)
