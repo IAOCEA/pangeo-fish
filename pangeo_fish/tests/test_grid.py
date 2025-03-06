@@ -17,7 +17,7 @@ def test_center_longitude():
             "latitude": ("cells", lats),
         }
     )
-    actual = center_longitude(ds, center=center)
+    actual = center_longitude(ds)
 
     lower, upper = -180, 180
 
