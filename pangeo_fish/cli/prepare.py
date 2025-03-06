@@ -59,7 +59,7 @@ def regrid(ds, parameters):
     grid = HealpyGridInfo(
         level=int(np.log2(parameters["nside"])), rot=parameters["rot"]
     )
-    target_grid = grid.target_grid(ds).pipe(center_longitude, 0)
+    target_grid = grid.target_grid(ds).pipe(center_longitude)
 
     regridder = HealpyRegridder(
         ds[["longitude", "latitude", "mask"]],
@@ -71,7 +71,7 @@ def regrid(ds, parameters):
         },
     )
     regridded = regridder.regrid_ds(ds)
-    reshaped = grid.to_2d(regridded).pipe(center_longitude, 0)
+    reshaped = grid.to_2d(regridded).pipe(center_longitude)
 
     return reshaped
 

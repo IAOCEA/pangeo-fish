@@ -25,16 +25,6 @@ def clear_attrs(obj, variables=None):
     return new_obj
 
 
-def postprocess_depth(ds):
-    # TODO: remove this as it is unused
-    new_names = {
-        detected: standard
-        for standard, (detected,) in ds.cf.standard_names.items()
-        if detected in ds.coords
-    }
-    return ds.rename(new_names)
-
-
 def normalize(obj, dim):
     return obj / obj.sum(dim=dim)
 

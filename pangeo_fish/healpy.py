@@ -190,30 +190,6 @@ def unique(iterable):
     return list(dict.fromkeys(iterable))
 
 
-def create_grid(nside, rot={"lat": 0, "lon": 0}):
-    xx, yy = _compute_indices(nside)
-
-    raw_indices = np.full((nside, nside), fill_value=-1, dtype=int)
-    raw_indices[xx, yy] = np.arange(nside**2)
-    indices = xr.DataArray(np.ravel(raw_indices), dims="cells").chunk()
-
-    lat_, lon_, cell_ids = _compute_coords(nside)
-    lat = lat_ - rot["lat"]
-    lon = lon_ + rot["lon"]
-
-    resolution = hp.nside2resol(nside)
-    coords = xr.Dataset(
-        {
-            "latitude": (["cells"], lat, {"units": "deg"}),
-            "longitude": (["cells"], lon, {"units": "deg"}),
-            "cell_ids": (["cells"], cell_ids),
-        },
-        coords={"resolution": ((), resolution, {"units": "rad"})},
-    )
-
-    return HealpyGridInfo(nside=nside, rot=rot, indices=indices, coords=coords)
-
-
 def _compute_weights(source_lat, source_lon, *, nside, rot={"lat": 0, "lon": 0}):
     theta = (90.0 - (source_lat - rot["lat"])) / 180.0 * np.pi
     phi = -(source_lon - rot["lon"]) / 180.0 * np.pi

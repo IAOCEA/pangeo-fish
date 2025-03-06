@@ -97,64 +97,6 @@ def zeros(coords, dtype=float):
     return xr.DataArray(data=data, dims=dims, coords=coords.coords)
 
 
-def delta_at(grid, *, pos, method="nearest", axes=["X", "Y"]):
-    """spatial delta function / Dirac distribution
-
-    Parameters
-    ----------
-    grid : Dataset
-        The reference grid.
-    pos : Dataset
-        The position of the peak.
-    axes : list of hashable, default: ["X", "Y"]
-        The coordinates to use. Can be anything that `cf-xarray`'s `.cf` accessor understands.
-    method : {"nearest", "point-in-polygon"}, default: "nearest"
-        The method to "snap" the position to the grid.
-
-        One of:
-        - "nearest": search for the nearest grid center (in cartesian space)
-                     Uses the coordinate's "nearest" search.
-        - "point-in-polygon": perform a point-in-polygon search on the cell bounds using `xvec`.
-
-    Returns
-    -------
-    DataArray
-        The delta function
-
-    See Also
-    --------
-    scipy.signal.unit_impulse
-    """
-
-    def _nearest(coords, pos):
-        index = coords.sel(pos, method="nearest")
-        return dict(index.variables)
-
-    def _query_bounds(coords, pos):
-        raise NotImplementedError("querying ")
-
-    coords = grid.cf[axes]
-    if "bounds" in coords.dims:
-        coords = coords.drop_dims("bounds")
-
-    pos_ = {coords.cf[axis].name: pos.cf[axis] for axis in axes}
-
-    methods = {
-        "nearest": _nearest,
-        "point-in-polygon": _query_bounds,
-    }
-
-    method_ = methods.get(method)
-    if method_ is None:
-        raise ValueError(f"unknown method: {method}")
-    grid_pos = method_(coords, pos_)
-
-    result = zeros(coords, dtype=float)
-    result.loc[grid_pos] = 1
-
-    return result
-
-
 def _discrete_gaussian_1d(sigma, radius):
     sigma2 = sigma * sigma
     x = np.arange(-radius, radius + 1)

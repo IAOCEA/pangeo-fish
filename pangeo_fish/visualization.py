@@ -4,9 +4,7 @@ import cartopy.crs as ccrs
 import cartopy.feature as cf
 import cmocean  # noqa: F401
 import hvplot.xarray  # noqa: F401
-import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
-import numpy as np
 import xarray as xr
 from shapely.errors import ShapelyDeprecationWarning
 
@@ -142,60 +140,6 @@ def create_single_frame(ds: xr.Dataset, figure, **kwargs):
     gl2.top_labels = False
 
     return None
-
-
-def render_frame(ds: xr.Dataset, *args, figsize=(14, 8), frames_dir=".", **kwargs):
-    """
-    .. Warning::
-        Designed to be used with `dask.map_blocks()`.
-        As such, `ds` must have the following variables:
-            - `time_index`, representing the time index. It is used for naming the image (`.png`)
-            - `emission` and `states`, the data to plot
-
-    Used along with `dask.map_blocks()`, it will call create_single_frame() for each timestep,\
-    and save the consequent images under `{frames_dir}/frame_XXXXX.png`.
-
-    Parameters
-    ----------
-    frames_dir : str, default: "."
-        Name of the folder to save the frame
-    figsize : tuple[float, float], default: (14, 8)
-        Name of the folder to save the frame
-
-    Returns
-    -------
-    ds : xr.Dataset
-        The input dataset (see `dask.map_blocks()`)
-    """
-
-    figure = plt.figure(figsize=figsize)  # figsize=(12, 6)
-
-    try:
-        if ds.sizes["time"] > 1:
-            warnings.warn(
-                f"Multiple timesteps detected in `ds` (size: {ds.sizes['time']}): only the first one will be rendered.",
-                UserWarning,
-            )
-
-        create_single_frame(ds.isel(time=0), figure, **kwargs)  # xr.Dataset.squeeze()?
-        time = ds["time"].values[0]
-        title = f"Time = {np.datetime_as_string(time, unit='s')}"
-        figure.suptitle(title)
-
-        time_index = ds["time_index"].values[0]
-        figure.savefig(
-            f"{frames_dir}/frame_{time_index:05d}.png"
-        )  # , bbox_inches="tight", pad_inches=0.2)
-    except Exception as e:
-        print(
-            f"============ Exception at time {ds['time_index'].values[0]} =============="
-        )
-        print(e)
-        print("=========================================================")
-    finally:
-        plt.close(figure)
-
-    return ds
 
 
 def plot_map(
